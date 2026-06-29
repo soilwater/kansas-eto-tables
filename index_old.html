@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kansas 7-Day ETₒ Reference Tables</title>
+<style>
+@font-face{font-family:'IBM Plex Sans';font-weight:400;font-display:swap;
+  src:url('fonts/IBMPlexSans-Regular.ttf') format('truetype')}
+@font-face{font-family:'IBM Plex Sans';font-weight:600;font-display:swap;
+  src:url('fonts/IBMPlexSans-SemiBold.ttf') format('truetype')}
+@font-face{font-family:'IBM Plex Sans';font-weight:700;font-display:swap;
+  src:url('fonts/IBMPlexSans-Bold.ttf') format('truetype')}
+@font-face{font-family:'IBM Plex Mono';font-weight:400;font-display:swap;
+  src:url('fonts/IBMPlexMono-Regular.ttf') format('truetype')}
+@font-face{font-family:'IBM Plex Mono';font-weight:600;font-display:swap;
+  src:url('fonts/IBMPlexMono-SemiBold.ttf') format('truetype')}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:       #f0f5fa;
+  --surface:  #ffffff;
+  --grid:     rgba(60,120,200,0.10);
+  --border:   rgba(60,120,200,0.20);
+  --border-hi:rgba(60,120,200,0.40);
+  --text:     #0f1e2e;
+  --dim:      #3a6080;
+  --muted:    #7aa0be;
+  --accent:   #1a72cc;
+  --rule:     rgba(60,120,200,0.10);
+}
+
+html{
+  font-size:15px;
+  background:var(--bg);
+  color:var(--text);
+  font-family:'IBM Plex Sans',system-ui,sans-serif;
+  -webkit-text-size-adjust:100%;
+}
+
+/* Blueprint dot grid */
+body{
+  min-height:100vh;display:flex;flex-direction:column;
+  background-image:
+    radial-gradient(circle, rgba(60,120,200,0.18) 1px, transparent 1px);
+  background-size:28px 28px;
+}
+
+/* ── Header ──────────────────────────────────────────────────── */
+header{
+  border-bottom:1px solid var(--border);
+  background:transparent;
+}
+.hdr-outer{
+  max-width:780px;margin:0 auto;
+  border-left:1px solid var(--border);
+  border-right:1px solid var(--border);
+}
+.hdr-title{
+  padding:18px 20px 14px;
+  border-bottom:1px solid var(--rule);
+  background:var(--surface);
+}
+
+h1{
+  font-size:1.1rem;font-weight:700;
+  letter-spacing:.06em;text-transform:uppercase;
+  color:var(--text);line-height:1.2;
+}
+.hdr-sub{
+  font-size:.75rem;color:var(--dim);margin-top:4px;font-weight:400;
+  letter-spacing:.02em;
+}
+.hdr-controls{
+  padding:10px 20px;
+  display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:var(--surface);
+}
+
+select#county-sel{
+  flex:1;min-width:160px;
+  background:rgba(60,120,200,0.05);
+  border:1px solid var(--border);
+  color:var(--text);padding:8px 12px;
+  border-radius:2px;
+  font-family:'IBM Plex Sans',sans-serif;font-size:.95rem;
+  cursor:pointer;outline:none;
+}
+select#county-sel:focus{border-color:var(--accent)}
+select#county-sel option{background:#f0f5fa;color:#0f1e2e}
+
+.dl-btns{display:flex;gap:6px;flex-shrink:0}
+.dl-btn{
+  padding:8px 15px;
+  background:transparent;
+  border:1px solid var(--border);
+  color:var(--dim);
+  border-radius:2px;
+  font-family:'IBM Plex Mono','Courier New',monospace; font-weight: 600;
+  font-size:1.0rem;letter-spacing:.08em;text-transform:uppercase;
+  cursor:pointer;
+  transition:border-color .12s,color .12s,background .12s;
+  white-space:nowrap;text-decoration:none;
+  display:inline-flex;align-items:center;gap:6px;
+}
+.dl-btn:hover{
+  border-color:var(--accent);
+  color:var(--accent);
+  background:rgba(60,120,200,0.05);
+}
+
+/* ── Main ────────────────────────────────────────────────────── */
+main{
+  max-width:780px;margin:0 auto;width:100%;
+  padding:20px 0 56px;flex:1;
+  border-left:1px solid var(--border);
+  border-right:1px solid var(--border);
+  background:rgba(255,255,255,0.85);
+}
+.main-inner{padding:0 20px}
+
+/* ── County image ────────────────────────────────────────────── */
+.img-wrap{
+  border-top:1px solid var(--rule);
+  border-bottom:1px solid var(--rule);
+  padding:20px 0;margin:0 0 0 0;
+}
+#county-img{
+  display:block;max-width:100%;margin:0 auto;
+  border:1px solid var(--border);
+}
+.img-error{
+  display:none;padding:56px 24px;text-align:center;
+  color:var(--dim);font-size:.88rem;line-height:1.9;
+  border:1px solid var(--border);
+  font-family:'IBM Plex Mono',monospace;
+}
+
+/* ── Summary box ─────────────────────────────────────────────── */
+.summary{
+  font-size:.85rem;color:var(--dim);line-height:1.75;
+  border-left:2px solid var(--accent);
+  padding:10px 14px;
+  margin-bottom:16px;
+  background:rgba(77,166,255,0.04);
+}
+.summary strong{color:var(--text);font-weight:600}
+
+/* ── Kc reference box ────────────────────────────────────────── */
+.kc-box{
+  border:1px solid var(--border);
+  padding:16px;margin-top:20px;
+  background:rgba(80,160,255,0.03);
+}
+.kc-box-label{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--accent);opacity:.65;margin-bottom:10px;
+}
+.kc-box > p{
+  font-size:.85rem;color:var(--dim);line-height:1.75;
+  margin-bottom:14px;
+}
+.kc-box strong{color:var(--text);font-weight:600}
+.kc-formula{
+  display:inline-block;
+  border:1px solid var(--border);
+  padding:1px 8px;
+  font-family:'IBM Plex Mono','Courier New',monospace;
+  font-size:.82rem;color:var(--accent);letter-spacing:.04em;margin:0 2px;
+  background:rgba(77,166,255,0.05);
+}
+.kc-table-wrap{overflow-x:auto;border:1px solid var(--border)}
+table.kc-table{
+  border-collapse:collapse;width:100%;
+}
+table.kc-table th{
+  background:rgba(80,160,255,0.08);
+  color:var(--dim);
+  font-family:'IBM Plex Mono',monospace;
+  font-weight:600;font-size:.68rem;
+  padding:8px 14px;text-align:left;
+  letter-spacing:.1em;text-transform:uppercase;
+  border-bottom:1px solid var(--border-hi);
+}
+table.kc-table th:not(:first-child){text-align:center}
+table.kc-table td{
+  padding:8px 14px;
+  border-bottom:1px solid var(--rule);
+  color:var(--text);font-size:.88rem;
+}
+table.kc-table td:not(:first-child){
+  text-align:center;
+  font-family:'IBM Plex Mono','Courier New',monospace;
+  font-size:.85rem;color:var(--dim);
+}
+table.kc-table tbody tr:last-child td{border-bottom:none}
+table.kc-table tbody tr:hover td{
+  background:rgba(80,160,255,0.05);
+  color:var(--text);
+}
+.kc-source{
+  font-size:.72rem;color:var(--muted);
+  margin-top:12px;line-height:1.65;
+  font-family:'IBM Plex Mono',monospace;
+  letter-spacing:.02em;
+}
+
+/* ── Footer ──────────────────────────────────────────────────── */
+footer{
+  text-align:center;padding:14px;
+  font-size:.7rem;color:var(--muted);
+  border-top:1px solid var(--border);
+  font-family:'IBM Plex Mono',monospace;
+  letter-spacing:.04em;text-transform:uppercase;
+}
+
+/* ── Print ───────────────────────────────────────────────────── */
+@media print{
+  @page{size:portrait;margin:.4in}
+  header,footer,.summary,.kc-box{display:none}
+  body{background:none}
+  main{padding:0;max-width:none;border:none;background:none}
+  .main-inner{padding:0}
+  .img-wrap{border:none;padding:0}
+  #county-img{max-width:100%;max-height:96vh;border:none}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hdr-outer">
+    <div class="hdr-title">
+      <h1>Kansas ET&#x2080; Reference Tables</h1>
+      <div class="hdr-sub">Typical 7-day cumulative reference evapotranspiration by county</div>
+    </div>
+    <div class="hdr-controls">
+      <select id="county-sel"><option disabled selected>Loading&#8230;</option></select>
+      <div class="dl-btns">
+        <a id="btn-jpg" class="dl-btn" href="#" download>&#11015;JPG</a>
+        <a id="btn-pdf" class="dl-btn" href="#" download>&#11015;PDF</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="main-inner">
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SUMMARY BOX — remove this div (and updateSummary() in JS)
+         to wipe this feature
+         ══════════════════════════════════════════════════════════ -->
+    <div style="padding-top:16px">
+      <div class="summary" id="summary"></div>
+    </div>
+
+    <div class="img-wrap">
+      <img id="county-img" src="" alt="County ET table"
+           onerror="showErr()" onload="hideErr()">
+      <div class="img-error" id="img-error">
+        // NO IMAGE FOUND FOR THIS COUNTY
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         KC REFERENCE BOX — remove this entire block to wipe it
+         ══════════════════════════════════════════════════════════ -->
+    <div class="kc-box">
+      <div class="kc-box-label">Crop Water Use Estimate</div>
+      <p style="margin-bottom: 0%;">
+        Multiplying ET&#x2080; by a <strong>crop coefficient (K<sub>c</sub>)</strong>
+        estimates well-watered crop water use:
+        <span class="kc-formula">ET<sub>c</sub> = K<sub>c</sub> &times; ET&#x2080;</span>.
+      </p>
+      <p>
+        K<sub>c</sub> changes through the season, use the stage that best
+        matches your crop&rsquo;s current development.
+      </p>
+      <div class="kc-table-wrap">
+        <table class="kc-table">
+          <thead>
+            <tr>
+              <th>Crop</th>
+              <th>Initial</th>
+              <th>Development</th>
+              <th>Mid-season<br><span style="font-weight:400;opacity:.7">(peak demand)</span></th>
+              <th>Late season</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Winter Wheat</td>  <td>0.30</td><td>0.70</td><td>1.15</td><td>0.40</td></tr>
+            <tr><td>Corn</td>          <td>0.30</td><td>0.75</td><td>1.20</td><td>0.60</td></tr>
+            <tr><td>Soybean</td>       <td>0.40</td><td>0.80</td><td>1.15</td><td>0.50</td></tr>
+            <tr><td>Grain Sorghum</td> <td>0.30</td><td>0.70</td><td>1.05</td><td>0.55</td></tr>
+            <tr><td>Sunflower</td>     <td>0.35</td><td>0.75</td><td>1.10</td><td>0.35</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="kc-source">
+        Source: FAO Irrigation &amp; Drainage Paper No.&nbsp;56 (Allen et&nbsp;al., 1998).
+        Values are approximations.
+      </p>
+    </div>
+    <!-- ═══════════════════════════════════════════════════════════ -->
+
+  </div>
+</main>
+
+<footer>
+  Soil Water Processes Lab &middot; Agronomy &middot; Kansas State University &middot; Climate: GRIDMET
+</footer>
+
+<script>
+var DATA = null;
+
+var MONTH_ABBR   = ['Jan','Feb','Mar','Apr','May','Jun',
+                    'Jul','Aug','Sep','Oct','Nov','Dec'];
+var MONTH_DAYS   = [31,28,31,30,31,30,31,31,30,31,30,31];
+var MONTH_OFFSET = (function(){
+  var off = [0], s = 0;
+  for(var i = 0; i < 11; i++){ s += MONTH_DAYS[i]; off.push(s); }
+  return off;
+})();
+
+function todayDOYIndex(){
+  var d = new Date();
+  return MONTH_OFFSET[d.getMonth()] + (d.getDate() - 1);
+}
+function fmtDate(d){
+  return MONTH_ABBR[d.getMonth()] + ' ' + d.getDate();
+}
+
+function updateSummary(county){
+  if(!DATA) return;
+  var cd  = DATA.counties[county];
+  var idx = todayDOYIndex();
+  var med = (cd.med[idx]).toFixed(2);
+  var p25 = (cd.p25[idx]).toFixed(2);
+  var p75 = (cd.p75[idx]).toFixed(2);
+  var today = new Date();
+  var start = new Date(today); start.setDate(start.getDate() - 6);
+  document.getElementById('summary').innerHTML =
+    'The typical 7-day cumulative reference ET\u2080 from ' +
+    '<strong>' + fmtDate(start) + ' to ' + fmtDate(today) + '</strong>' +
+    ' for <strong>' + county + ' County</strong> is ' +
+    '<strong>' + med + '\u2009in/week</strong>, with typical values ranging from ' +
+    '<strong>' + p25 + '</strong> to <strong>' + p75 + '\u2009in/week</strong>' +
+    ' (25th\u201375th percentile).';
+}
+
+async function init(){
+  var resp = await fetch('ks_data.json');
+  DATA = await resp.json();
+
+  var sel = document.getElementById('county-sel');
+  sel.innerHTML = '';
+  Object.keys(DATA.counties).sort().forEach(function(name){
+    var o = document.createElement('option');
+    o.value = name;
+    o.textContent = name + ' County';
+    sel.appendChild(o);
+  });
+
+  sel.addEventListener('change', onCountyChange);
+  sel.value = 'Riley';
+  onCountyChange();
+}
+
+function onCountyChange(){
+  var county = document.getElementById('county-sel').value;
+  var slug   = county.toLowerCase().replace(/\s+/g, '_');
+  var imgPath = 'images/' + slug + '_ks.jpg';
+  var pdfPath = 'pdfs/'   + slug + '_ks.pdf';
+
+  document.getElementById('county-img').src = imgPath;
+
+  var jpg = document.getElementById('btn-jpg');
+  jpg.href = imgPath; jpg.download = slug + '_et7.jpg';
+
+  var pdf = document.getElementById('btn-pdf');
+  pdf.href = pdfPath; pdf.download = slug + '_et7.pdf';
+
+  updateSummary(county);
+}
+
+function showErr(){
+  document.getElementById('county-img').style.display = 'none';
+  document.getElementById('img-error').style.display  = 'block';
+}
+function hideErr(){
+  document.getElementById('county-img').style.display = 'block';
+  document.getElementById('img-error').style.display  = 'none';
+}
+
+init();
+</script>
+</body>
+</html>
