@@ -174,6 +174,21 @@ main{
   border-bottom:1px solid var(--rule);
   padding:20px 0;
 }
+.img-head{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:12px;flex-wrap:wrap;
+  margin-bottom:14px;
+}
+.img-head-label{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--accent);opacity:.75;
+  cursor:default;
+}
+.img-toggle-input{
+  position:absolute;opacity:0;width:0;height:0;pointer-events:none;
+}
+.img-body{display:block}
 #county-img{display:block;max-width:100%;margin:0 auto;border:1px solid var(--border)}
 .img-error{
   display:none;padding:56px 24px;text-align:center;
@@ -305,11 +320,51 @@ footer{
 @media(max-width:520px){
   .hdr-date{font-size:.62rem}
   .calc-op{display:none}
-  .info-row{flex-direction:column}
-  .hero-card{width:100%;flex-direction:row;align-items:center;gap:14px;text-align:left;padding:10px 14px}
-  .hero-unit{margin-bottom:0}
-  .hero-peak{margin-top:0;flex:1}
+
+  /* Hero banner: big ETo number + summary sentence, sized to content */
+  .info-row{
+    flex-direction:column;
+    padding-top:32px;padding-bottom:32px;margin-bottom:28px;
+    gap:20px;
+  }
+  .hero-card{
+    width:100%;flex-direction:column;align-items:center;
+    text-align:center;padding:28px 20px 24px;
+    gap:0;
+  }
+  .hero-label{font-size:.7rem}
+  .hero-val{font-size:5.5rem;line-height:1}
+  .hero-unit{font-size:.85rem;margin-top:2px;margin-bottom:18px}
+  .hero-peak{margin-top:0;max-width:220px}
+  .hero-peak-track{height:6px}
+  .hero-peak-pct{font-size:.7rem;margin-top:2px}
+  .summary{
+    flex:none;
+    font-size:1.05rem;line-height:1.85;
+    padding:14px 18px;text-align:left;
+  }
+
+  /* Collapsed-by-default county image, CSS-only via checkbox hack.
+     The header label itself is the toggle on mobile. */
+  .img-head{margin-bottom:10px}
+  .img-head-label{
+    display:flex;align-items:center;gap:6px;
+    cursor:pointer;
+  }
+  .img-head-label::before{
+    content:'';
+    width:0;height:0;flex-shrink:0;
+    border-left:4px solid var(--accent);
+    border-top:3px solid transparent;
+    border-bottom:3px solid transparent;
+    transition:transform .15s ease;
+    opacity:.85;
+  }
+  .img-toggle-input:checked ~ .img-head .img-head-label::before{transform:rotate(90deg)}
+  .img-body{display:none;margin-top:12px}
+  .img-toggle-input:checked ~ .img-body{display:block}
 }
+
 </style>
 </head>
 <body>
@@ -328,10 +383,6 @@ footer{
     </div>
     <div class="hdr-controls">
       <select id="county-sel"><option disabled selected>Loading&#8230;</option></select>
-      <div class="dl-btns">
-        <a id="btn-jpg" class="dl-btn" href="#" download>&#11015;JPG</a>
-        <a id="btn-pdf" class="dl-btn" href="#" download>&#11015;PDF</a>
-      </div>
     </div>
   </div>
 </header>
@@ -356,8 +407,18 @@ footer{
     </div>
 
     <div class="img-wrap">
-      <img id="county-img" alt="County ET table">
-      <div class="img-error" id="img-error">// NO IMAGE FOUND FOR THIS COUNTY</div>
+      <input type="checkbox" id="img-toggle" class="img-toggle-input">
+      <div class="img-head">
+        <label for="img-toggle" class="img-head-label">7&#8209;Day ET&#x2080; Table</label>
+        <div class="dl-btns">
+          <a id="btn-jpg" class="dl-btn" href="#" download>&#11015;JPG</a>
+          <a id="btn-pdf" class="dl-btn" href="#" download>&#11015;PDF</a>
+        </div>
+      </div>
+      <div class="img-body">
+        <img id="county-img" alt="County ET table">
+        <div class="img-error" id="img-error">// NO IMAGE FOUND FOR THIS COUNTY</div>
+      </div>
     </div>
 
     <!-- Calculator -->
